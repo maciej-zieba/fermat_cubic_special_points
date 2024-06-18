@@ -218,5 +218,3 @@ proc indexes_to_cycles(list @indexes, list @permutations) {
     }
     return (cycles);
 }
-
-// proc line_from_

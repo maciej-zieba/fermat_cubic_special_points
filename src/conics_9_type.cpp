@@ -171,4 +171,24 @@ for (int i = 1; i <= size(PointsWhereNineConicsIntersect) - 1; i++) {
 }
 write("data/72_points_where_nine_conics_intersect.txt", "list(" + string(PointsWhereNineConicsIntersect[size(PointsWhereNineConicsIntersect)][1]) + ", " + string(PointsWhereNineConicsIntersect[size(PointsWhereNineConicsIntersect)][2]) + ", " + string(PointsWhereNineConicsIntersect[size(PointsWhereNineConicsIntersect)][3]) + ");");
 
+// List of 72 points in terms of s = e^((2ipi)/9) and t = 3^(1/3)
 
+ring S = 0, (s, t, u), dp;
+
+list PointsWhereNineConicsIntersectST = imap(R, PointsWhereNineConicsIntersect);
+
+ideal I = s3 - 3, t6 + t3 + 1;
+I = std(I);
+
+for(int i = 1; i <= size(PointsWhereNineConicsIntersectST); i++){
+    PointsWhereNineConicsIntersectST[i][1] = reduce(subst(PointsWhereNineConicsIntersectST[i][1], u, s + t), I);
+    PointsWhereNineConicsIntersectST[i][2] = reduce(subst(PointsWhereNineConicsIntersectST[i][2], u, s + t), I);
+    PointsWhereNineConicsIntersectST[i][3] = reduce(subst(PointsWhereNineConicsIntersectST[i][3], u, s + t), I);
+}
+
+for(int i = 1; i <= size(PointsWhereNineConicsIntersectST); i++){
+    /* Uncomment to print the points in the form of s and t */
+    // "Point " + string(i) + ":", 
+    // PointsWhereNineConicsIntersectST[i][1] + ", " + PointsWhereNineConicsIntersectST[i][2] + ", " + PointsWhereNineConicsIntersectST[i][3];
+    // "";
+}

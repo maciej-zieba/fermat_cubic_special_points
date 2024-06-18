@@ -88,22 +88,45 @@ for (int i = 1; i <= size(Points9type) - 1; i++) {
 }
 write("data/9_type_points.txt", "list(" + string(Points9type[size(Points9type)][1]) + ", " + string(Points9type[size(Points9type)][2]) + ", " + string(Points9type[size(Points9type)][3]) + ");");
 
-ring S = 0, (s, t, u), dp;
-list Points9typeST = imap(R9, Points9type);
-
 // List of 72 points in terms of s = e^((2ipi)/9) and t = 3^(1/3)
-ideal I = s6 + s3 + 1, t3 - 3;
+list FirstWayPoints9type;
+list SecondWayPoints9type;
+list ThirdWayPoints9type;
+
+for (int i = 1; i <= size(Points9type); i++) {
+    FirstWayPoints9type = FirstWayPoints9type + list(list(1, Points9type[i][2]/Points9type[i][1], Points9type[i][3]/Points9type[i][1]));
+    SecondWayPoints9type = SecondWayPoints9type + list(list(Points9type[i][1]/Points9type[i][2], 1, Points9type[i][3]/Points9type[i][2]));
+    ThirdWayPoints9type = ThirdWayPoints9type + list(list(Points9type[i][1]/Points9type[i][3], Points9type[i][2]/Points9type[i][3], 1));
+}
+
+ring S = 0, (s, t, u), dp;
+
+list FirstWayPoints9typeST = imap(R9, FirstWayPoints9type);
+list SecondWayPoints9typeST = imap(R9, SecondWayPoints9type);
+list ThirdWayPoints9typeST = imap(R9, ThirdWayPoints9type);
+
+ideal I = s3 - 3, t6 + t3 + 1;
 I = std(I);
-list Points9typeSimplified = Points9typeST;
 
-for(int i = 1; i <= size(Points9typeST); i++) {
-    Points9typeSimplified[i][1] = reduce(subst(Points9typeST[i][1], u, s + t), I);
-    Points9typeSimplified[i][2] = reduce(subst(Points9typeST[i][2], u, s + t), I);
-    Points9typeSimplified[i][3] = reduce(subst(Points9typeST[i][3], u, s + t), I);
+for(int i = 1; i <= size(FirstWayPoints9typeST); i++){
+    FirstWayPoints9typeST[i][1] = reduce(subst(FirstWayPoints9typeST[i][1], u, s + t), I);
+    FirstWayPoints9typeST[i][2] = reduce(subst(FirstWayPoints9typeST[i][2], u, s + t), I);
+    FirstWayPoints9typeST[i][3] = reduce(subst(FirstWayPoints9typeST[i][3], u, s + t), I);
+
+    SecondWayPoints9typeST[i][1] = reduce(subst(SecondWayPoints9typeST[i][1], u, s + t), I);
+    SecondWayPoints9typeST[i][2] = reduce(subst(SecondWayPoints9typeST[i][2], u, s + t), I);
+    SecondWayPoints9typeST[i][3] = reduce(subst(SecondWayPoints9typeST[i][3], u, s + t), I);
+
+    ThirdWayPoints9typeST[i][1] = reduce(subst(ThirdWayPoints9typeST[i][1], u, s + t), I);
+    ThirdWayPoints9typeST[i][2] = reduce(subst(ThirdWayPoints9typeST[i][2], u, s + t), I);
+    ThirdWayPoints9typeST[i][3] = reduce(subst(ThirdWayPoints9typeST[i][3], u, s + t), I);
 }
 
-write(":w data/9_type_points_simplified.txt", "list Points9typeSimplified = ");
-for (int i = 1; i <= size(Points9typeSimplified) - 1; i++) {
-    write("data/9_type_points_simplified.txt", "list(" + string(Points9typeSimplified[i][1]) + ", " + string(Points9typeSimplified[i][2]) + ", " + string(Points9typeSimplified[i][3]) + "),");
+for(int i = 1; i <= size(FirstWayPoints9typeST); i++) {
+    /* Uncomment this to print the points in the form of s and t */
+    // "Point " + string(i) + ":";
+    // "First way: " + string(FirstWayPoints9typeST[i]);
+    // "Second way: " + string(SecondWayPoints9typeST[i]);
+    // "Third way: " + string(ThirdWayPoints9typeST[i]);
+    // "";
 }
-write("data/9_type_points_simplified.txt", "list(" + string(Points9typeSimplified[size(Points9typeSimplified)][1]) + ", " + string(Points9typeSimplified[size(Points9typeSimplified)][2]) + ", " + string(Points9typeSimplified[size(Points9typeSimplified)][3]) + ");");
